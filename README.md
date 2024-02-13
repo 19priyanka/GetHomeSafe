@@ -9,6 +9,9 @@ _Objective and Scope_
 We plan to prioritize privacy concerns by displaying only minimal location information, striking a balance between assuring others of your safety while respecting individual privacy boundaries. The application is designed for temporary or short-term location sharing. This is achieved using temporary sessions, allowing a group of friends to stay connected effortlessly without needing to share personal contact information. This differentiates our application from existing solutions such as Apple’s Find My and Life360 as individuals aren’t required to share account information (i.e. phone, email, social media) and share precise locations for a long period of time. A use case for application is at a corporate function with their team and wants to ensure that everyone gets home safe. Utilizing our application the members of the team can join by scanning a QR code, monitor if members of the group have arrived home, all without revealing personal information such as phone numbers and home addresses.
 
 **Principles of Distributed Systems**
+
+
+
 _Replication_
 The purpose behind replication is to improve the system’s availability, scalability, and fault tolerance.
 
