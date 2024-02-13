@@ -1,4 +1,4 @@
-**CPSC 559 Project Proposal – Team 3**
+**Get Home Safe**
 
 
 
