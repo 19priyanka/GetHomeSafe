@@ -13,10 +13,8 @@ export default function App() {
     <Navigation>
     <Login/>
     </Navigation>
-  
     </>
     
   );
 }
-
 
