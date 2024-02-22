@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
   GluestackUIProvider,
@@ -15,59 +15,96 @@ import {
   InputField,
   Button,
   ButtonText,
-  Text
+  HStack,
+  Text, Avatar, AvatarFallbackText
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 
 
 export default function ProfilePage() {
     const navigation = useNavigation();
-  return (
+    const [userFullName, setUserFullName] = useState("John Doe");
+    const [userEmail, setUserEmail] = useState("JohnDoe@gmail.com");
+    const [userAddress, setUserAddress] = useState("1234 Main St, City, State, 12345");
+    const [isEditing, setIsEditing] = useState(false);
+
+    const saveInfo = () => {
+      // Save user info
+      setIsEditing(false);
+      //@ts-ignore
+     
+    };
+
+    return (
       <GluestackUIProvider config={config}>
         <SafeAreaView flex={1}>
+          <ScrollView>
+
+         
           <VStack space="md" reversed={false}>
             <Box>
               <View style={styles.safetyIcon}>
-                  <Heading size="3xl">My Account</Heading>
+                <Heading size="2xl">My Account</Heading>
                 <Image
-                  alt="shiedl"
+                  alt="shield"
                   source={require("../../../assets/location.png")}
                   style={{width: 50, height: 50}}
                 />
-                
               </View>
             </Box>
             <View>
               <VStack space="md" reversed={false}>
+                <HStack space="lg">
+                  <Box style={{marginLeft:10}}>
+                  <Avatar bgColor="$amber600" size="xl" borderRadius="$full">
+                    <AvatarFallbackText>{userFullName}</AvatarFallbackText>
+                </Avatar>
+                  </Box>
+              <Box>
+              <Heading style={{maxWidth:'80%', marginVertical:10, textAlign:'center'}}size="2xl">{userFullName}</Heading>
+              </Box>
                
+                </HStack>
                 <View>
-                <FormControl
+                  <FormControl
                     size="md"
-                    isRequired={true}
                     style={styles.formControl}
                   >
                     <FormControlLabel mb="$1">
                       <FormControlLabelText>Display Name</FormControlLabelText>
                     </FormControlLabel>
-                    <Input>
-                      <InputField placeholder="Your Name" />
-                    </Input>
+                    {isEditing ? (
+                      <Input>
+                        <InputField 
+                          onChangeText={(value) => setUserFullName(value)}
+                          value={userFullName}
+                        />
+                      </Input>
+                    ) : (
+                      <Text>{userFullName}</Text>
+                    )}
                   </FormControl>
                   <FormControl
                     size="md"
-                    isRequired={true}
                     style={styles.formControl}
                   >
                     <FormControlLabel mb="$1">
                       <FormControlLabelText>Email</FormControlLabelText>
                     </FormControlLabel>
-                    <Input>
-                      <InputField placeholder="Email" />
-                    </Input>
+                    {isEditing ? (
+                      <Input>
+                        <InputField 
+                          onChangeText={(value) => setUserEmail(value)}
+                          value={userEmail}
+                        />
+                      </Input>
+                    ) : (
+                      <Text>{userEmail}</Text>
+                    )}
                   </FormControl>
                   <FormControl
                     size="md"
-                    isRequired={true}
+                    isReadOnly={true}
                     style={styles.formControl}
                   >
                     <FormControlLabel mb="$1">
@@ -76,38 +113,69 @@ export default function ProfilePage() {
                     <Input>
                       <InputField
                         type="password"
-                      
+                        defaultValue="password"
                         placeholder="password"
                       />
                     </Input>
                   </FormControl>
                   <FormControl
                     size="md"
-                    isRequired={true}
                     style={styles.formControl}
                   >
                     <FormControlLabel mb="$1">
                       <FormControlLabelText>Home Address</FormControlLabelText>
                     </FormControlLabel>
-                    <Input>
-                     
-                    </Input>
+                    {isEditing ? (
+                      <Input>
+                        <InputField 
+                          onChangeText={(value) => setUserAddress(value)}
+                          value={userAddress}
+                        />
+                      </Input>
+                    ) : (
+                      <Text>{userAddress}</Text>
+                    )}
                   </FormControl>
                 </View>
                 <View style={styles.buttonContainer}>
-                <Button size="lg" variant="solid" action="primary" style={styles.button}>
-                  <ButtonText>Sign Up</ButtonText>
-                </Button>
+                  {isEditing ? (
+                    <Button 
+                      size="lg" 
+                      variant="solid" 
+                      action="primary" 
+                      style={styles.button} 
+                      onPress={saveInfo}
+                    >
+                      <ButtonText>Save Info</ButtonText>
+                    </Button>
+                  ) : (
+                    <Button 
+                      size="lg" 
+                      variant="solid" 
+                      action="primary" 
+                      style={styles.button} 
+                      onPress={() => setIsEditing(true)}
+                    >
+                      <ButtonText>Edit Info</ButtonText>
+                    </Button>
+                  )}
                 </View>
               </VStack>
             </View>
           </VStack>
+          </ScrollView>
         </SafeAreaView>
       </GluestackUIProvider>
     );
   }
   
   const styles = StyleSheet.create({
+    avatar: {
+      display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  margin: 10,
+    },
     safetyIcon: {
       display: "flex",
       flexDirection: "row",
@@ -134,7 +202,4 @@ export default function ProfilePage() {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-    },
-
-  });
-  
+    }});

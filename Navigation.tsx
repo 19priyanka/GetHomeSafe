@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from './src/components/login/Login'; 
 import ProfilePage from './src/components/profilepage/ProfilePage';
+
 import SignUp from './src/components/signup/SignUp';
 
 import MyParties from './src/components/parties/MyParties';
@@ -48,6 +49,8 @@ const Navigation = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );
