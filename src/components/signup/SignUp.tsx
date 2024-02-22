@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import {  useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import {
   GluestackUIProvider,
   SafeAreaView,
@@ -19,7 +19,8 @@ import {
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 
-export default function Login() {
+
+export default function SignUp() {
   const navigation = useNavigation();
 
   return (
@@ -38,12 +39,21 @@ export default function Login() {
           <View>
             <VStack space="md" reversed={false}>
               <View style={styles.heading}>
-                <Heading size="5xl">Login</Heading>
-                <Heading size="xl" italic>
-                  Please sign in to continue
-                </Heading>
+                <Heading size="4xl">Create Account</Heading>
               </View>
               <View>
+              <FormControl
+                  size="md"
+                  isRequired={true}
+                  style={styles.formControl}
+                >
+                  <FormControlLabel mb="$1">
+                    <FormControlLabelText>Display Name</FormControlLabelText>
+                  </FormControlLabel>
+                  <Input>
+                    <InputField placeholder="Your Name" />
+                  </Input>
+                </FormControl>
                 <FormControl
                   size="md"
                   isRequired={true}
@@ -67,29 +77,39 @@ export default function Login() {
                   <Input>
                     <InputField
                       type="password"
-                      
+                    
                       placeholder="password"
                     />
                   </Input>
                 </FormControl>
+                <FormControl
+                  size="md"
+                  isRequired={true}
+                  style={styles.formControl}
+                >
+                  <FormControlLabel mb="$1">
+                    <FormControlLabelText>Home Address</FormControlLabelText>
+                  </FormControlLabel>
+                  <Input>
+                   
+                  </Input>
+                </FormControl>
               </View>
               <View style={styles.buttonContainer}>
-              <Button size="lg" variant="solid" action="primary" style={styles.button}>
-                <ButtonText>Log in</ButtonText>
+              <Button size="lg" variant="solid" action="primary" style={styles.button} onPress={()=> {navigation.navigate('SignUp')}}>
+                <ButtonText>Sign Up</ButtonText>
               </Button>
               </View>
             </VStack>
             <View style={styles.bottomText}>
-            <TouchableOpacity onPress={()=> {navigation.navigate('SignUp')}}>
+            <TouchableOpacity onPress={()=> {navigation.navigate('Login')}}>
               <Text>
-                Don't have an account?{" "}
-               
+                Already have an account?{" "}
                 <Text
                   style={{ color: "#206F3E" }}
                 >
-                  Sign up
+                  Log in
                 </Text>
-                
               </Text>
               </TouchableOpacity>
             </View>
