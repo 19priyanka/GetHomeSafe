@@ -7,15 +7,35 @@ import ProfilePage from './src/components/profilepage/ProfilePage';
 import SignUp from './src/components/signup/SignUp';
 import Homepage from './src/components/parties/Homepage';
 import MyParties from './src/components/parties/MyParties';
+import {Image } from "@gluestack-ui/themed";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function TabNavigator(){
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="MyParties" component={MyParties} />
-      <Tab.Screen name="MyProfile" component={ProfilePage} />
+    <Tab.Navigator 
+    screenOptions={({ route }) => ({
+      tabBarIcon: () => {
+        
+        let iconComponent;
+        if (route.name === 'MyParties') {
+          iconComponent = <Image alt='MyParties icon' source={require("./assets/people.png")} style={{marginTop:5, width: 40, height: 40 }} />;
+        } else if (route.name === 'MyProfile') {
+          iconComponent = <Image alt='MyProfile icon' source={require("./assets/user.png")} style={{  marginTop:9, width: 40, height: 40 }} />;
+        }
+        return iconComponent;
+      },
+      tabBarLabelStyle: {
+        fontSize: 14, 
+      },
+      tabBarShowLabel: false,
+      keyboardHidesTabBar: true, 
+        })}    
+      >
+      <Tab.Screen name="MyParties" component={MyParties} options={{title: "My Parties"}} />
+      <Tab.Screen name="MyProfile" component={ProfilePage} options={{title: "My Profile"}}/>
     </Tab.Navigator>
   );
 };
@@ -27,7 +47,6 @@ const Navigation = () => {
        <Stack.Navigator>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="ProfilePage" component={ProfilePage} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
