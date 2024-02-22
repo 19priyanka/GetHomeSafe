@@ -187,7 +187,18 @@ export default function ProfilePage() {
                       <ButtonText>Edit Info</ButtonText>
                     </Button>
                   )}
-                </View>
+                     </View>
+                     <View style={styles.signout_button}>
+                     <Button
+                    size="md"
+                    variant="link"
+                    action="primary"
+                    style={{width:'30%'}}
+                    onPress={() => navigation.navigate('Login')}> 
+                    <ButtonText>Sign Out</ButtonText></Button>
+             
+                     </View>
+                  
               </VStack>
             </View>
           </VStack>
@@ -224,8 +235,15 @@ const styles = StyleSheet.create({
     width: "70%",
     backgroundColor: "#005253",
   },
+  signout_button:{
+    marginTop:15,
+   display: "flex",
+   flexDirection: "row",
+  justifyContent: "flex-end",
+  },
+  
   buttonContainer: {
-    margin: 10,
+
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
