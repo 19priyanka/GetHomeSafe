@@ -15,13 +15,46 @@ import {
   InputField,
   Button,
   ButtonText,
-  Text
+  Text,
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
-
+import axiosInstance from "../../utils/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SignUp() {
   const navigation = useNavigation();
+
+  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
+
+  const signUp = () => {
+    const userSignup = {
+      displayName,
+      address: {
+        coordinates: {
+          lat: 0,
+          long: 0,
+        },
+        street: address,
+        city: "Toronto",
+        province: "Ontario",
+        postalCode: "M5V 2L9",
+      },
+      email,
+      password,
+    };
+
+    axiosInstance.post("http://localhost:8080/api/signup", userSignup).then((response) => {
+      if (response.headers["x-auth-token"]){
+        AsyncStorage.setItem("x-auth-token", response.headers["x-auth-token"]);
+      }
+      console.log(response);
+    }).catch((e) => {
+      console.error(e);
+    })
+  };
 
   return (
     <GluestackUIProvider config={config}>
@@ -32,7 +65,7 @@ export default function SignUp() {
               <Image
                 alt="shiedl"
                 source={require("../../../assets/location.png")}
-                style={{width: 50, height: 50}}
+                style={{ width: 50, height: 50 }}
               />
             </View>
           </Box>
@@ -42,7 +75,7 @@ export default function SignUp() {
                 <Heading size="4xl">Create Account</Heading>
               </View>
               <View>
-              <FormControl
+                <FormControl
                   size="md"
                   isRequired={true}
                   style={styles.formControl}
@@ -51,7 +84,11 @@ export default function SignUp() {
                     <FormControlLabelText>Display Name</FormControlLabelText>
                   </FormControlLabel>
                   <Input>
-                    <InputField placeholder="Your Name" />
+                    <InputField
+                      placeholder="Your Name"
+                      onChangeText={(value) => setDisplayName(value)}
+                      value={displayName}
+                    />
                   </Input>
                 </FormControl>
                 <FormControl
@@ -63,7 +100,11 @@ export default function SignUp() {
                     <FormControlLabelText>Email</FormControlLabelText>
                   </FormControlLabel>
                   <Input>
-                    <InputField placeholder="Email" />
+                    <InputField
+                      placeholder="Email"
+                      onChangeText={(e) => setEmail(e)}
+                      value={email}
+                    />
                   </Input>
                 </FormControl>
                 <FormControl
@@ -77,8 +118,9 @@ export default function SignUp() {
                   <Input>
                     <InputField
                       type="password"
-                    
                       placeholder="password"
+                      onChangeText={(e) => setPassword(e)}
+                      value={password}
                     />
                   </Input>
                 </FormControl>
@@ -91,27 +133,37 @@ export default function SignUp() {
                     <FormControlLabelText>Home Address</FormControlLabelText>
                   </FormControlLabel>
                   <Input>
-                   
+                    <InputField
+                      placeholder="Address"
+                      onChangeText={(e) => setAddress(e)}
+                      value={address}
+                    />
                   </Input>
                 </FormControl>
               </View>
               <View style={styles.buttonContainer}>
-              <Button size="lg" variant="solid" action="primary" style={styles.button}>
-                <ButtonText>Sign Up</ButtonText>
-              </Button>
+                <Button
+                  size="lg"
+                  variant="solid"
+                  action="primary"
+                  style={styles.button}
+                  onPress={signUp}
+                >
+                  <ButtonText>Sign Up</ButtonText>
+                </Button>
               </View>
             </VStack>
             <View style={styles.bottomText}>
-             { /*@ts-ignore */ }
-            <TouchableOpacity onPress={()=> {navigation.navigate('Login')}}>
-              <Text>
-                Already have an account?{" "}
-                <Text
-                  style={{ color: "#206F3E" }}
-                >
-                  Log in
+              {/*@ts-ignore */}
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Login");
+                }}
+              >
+                <Text>
+                  Already have an account?{" "}
+                  <Text style={{ color: "#206F3E" }}>Log in</Text>
                 </Text>
-              </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -138,22 +190,22 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 30,
   },
-  button:{
-    width:"70%",
-    backgroundColor:"#005253"
+  button: {
+    width: "70%",
+    backgroundColor: "#005253",
   },
-  buttonContainer:{
-    margin:20,
+  buttonContainer: {
+    margin: 20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  bottomText:{
+  bottomText: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    margin:10
-  }
+    margin: 10,
+  },
 });
