@@ -22,6 +22,14 @@ import { config } from "@gluestack-ui/config";
 export default function Login() {
   const navigation = useNavigation();
 
+  const onPressLogin = () => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.navigate('MyParties');
+      unsubscribe();
+    });
+    navigation.navigate('TabNavigator');
+  }
+
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView flex={1}>
@@ -74,7 +82,7 @@ export default function Login() {
                 </FormControl>
               </View>
               <View style={styles.buttonContainer}>
-              <Button size="lg" variant="solid" action="primary" style={styles.button}>
+              <Button size="lg" variant="solid" action="primary" style={styles.button} onPress={onPressLogin}>
                 <ButtonText>Log in</ButtonText>
               </Button>
               </View>
