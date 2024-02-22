@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#005253",
   },
   buttonContainer: {
-    margin: 30,
+    margin: 10,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
