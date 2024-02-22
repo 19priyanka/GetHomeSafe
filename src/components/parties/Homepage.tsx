@@ -14,7 +14,7 @@ import {
   Text
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
-import BottomNavBar from "../NavBar/BottomNavBar";
+
 import MyParties from "../parties/MyParties";
 import ProfilePage from "../profilepage/ProfilePage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
