@@ -30,7 +30,7 @@ export default function Login() {
             <View style={styles.safetyIcon}>
               <Image
                 alt="shiedl"
-                source={require("../../../assets/splash.png")}
+                source={require("../../../assets/location.png")}
               />
             </View>
           </Box>
