@@ -96,7 +96,7 @@ export default function SignUp() {
                 </FormControl>
               </View>
               <View style={styles.buttonContainer}>
-              <Button size="lg" variant="solid" action="primary" style={styles.button} onPress={()=> {navigation.navigate('SignUp')}}>
+              <Button size="lg" variant="solid" action="primary" style={styles.button}>
                 <ButtonText>Sign Up</ButtonText>
               </Button>
               </View>

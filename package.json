@@ -9,12 +9,16 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@aws-amplify/auth": "^6.0.17",
+    "@aws-amplify/core": "^6.0.17",
     "@expo/webpack-config": "~19.0.1",
     "@gluestack-ui/config": "^1.1.2",
     "@gluestack-ui/themed": "^1.1.8",
+    "@react-navigation/bottom-tabs": "^6.5.12",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/stack": "^6.3.21",
     "@types/react": "~18.2.45",
+    "aws-amplify": "^6.0.17",
     "expo": "~50.0.6",
     "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
