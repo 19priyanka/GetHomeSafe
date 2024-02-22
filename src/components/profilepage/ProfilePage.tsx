@@ -65,7 +65,7 @@ export default function ProfilePage() {
                   <Box style={{ marginLeft: 10 }}>
                     <Avatar bgColor="$amber600" size="xl" borderRadius="$full">
                       <AvatarFallbackText>{userFullName}</AvatarFallbackText>
-                      <AvatarBadge></AvatarBadge>
+                     {isHome? ( <AvatarBadge></AvatarBadge>) : (<AvatarBadge bgColor="$red500"></AvatarBadge>)}
                     </Avatar>
                   </Box>
                   <Box>
