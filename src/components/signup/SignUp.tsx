@@ -102,6 +102,7 @@ export default function SignUp() {
               </View>
             </VStack>
             <View style={styles.bottomText}>
+             { /*@ts-ignore */ }
             <TouchableOpacity onPress={()=> {navigation.navigate('Login')}}>
               <Text>
                 Already have an account?{" "}

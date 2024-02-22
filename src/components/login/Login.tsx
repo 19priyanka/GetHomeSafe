@@ -24,9 +24,11 @@ export default function Login() {
 
   const onPressLogin = () => {
     const unsubscribe = navigation.addListener('focus', () => {
+   //@ts-ignore
       navigation.navigate('MyParties');
       unsubscribe();
     });
+   //@ts-ignore
     navigation.navigate('TabNavigator');
   }
 
@@ -88,6 +90,7 @@ export default function Login() {
               </View>
             </VStack>
             <View style={styles.bottomText}>
+            { /*@ts-ignore */ }
             <TouchableOpacity onPress={()=> {navigation.navigate('SignUp')}}>
               <Text>
                 Don't have an account?{" "}
