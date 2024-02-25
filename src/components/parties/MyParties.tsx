@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
 import {
@@ -13,9 +13,15 @@ import {
   Text
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
+import { auth } from "../../firebase/firebaseConfig";
 
 
 export default function MyParties() {
+
+  useEffect(() => {
+    console.log(auth.currentUser)
+  }, [])
+
     const navigation = useNavigation();
   
     return (

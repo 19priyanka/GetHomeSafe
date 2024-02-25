@@ -18,18 +18,30 @@ import {
   Text
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
+import { app, auth } from "../../firebase/firebaseConfig";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function Login() {
   const navigation = useNavigation();
+  const auth = getAuth(app);
+
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const onPressLogin = () => {
-    const unsubscribe = navigation.addListener('focus', () => {
-   //@ts-ignore
-      navigation.navigate('MyParties');
-      unsubscribe();
-    });
-   //@ts-ignore
-    navigation.navigate('TabNavigator');
+    signInWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          //@ts-ignore
+             navigation.navigate('MyParties');
+             unsubscribe();
+           });
+           //@ts-ignore
+           navigation.navigate('TabNavigator');
+      }).catch((error) => {
+        setError(error.message)
+      })
   }
 
   return (
@@ -52,6 +64,7 @@ export default function Login() {
                 <Heading size="xl" italic>
                   Please sign in to continue
                 </Heading>
+                <Text>{error}</Text>
               </View>
               <View>
                 <FormControl
@@ -63,7 +76,7 @@ export default function Login() {
                     <FormControlLabelText>Email</FormControlLabelText>
                   </FormControlLabel>
                   <Input>
-                    <InputField placeholder="Email" />
+                    <InputField onChangeText={(v) => setEmail(v)} placeholder="Email" value={email} keyboardType="email-address" />
                   </Input>
                 </FormControl>
                 <FormControl
@@ -77,8 +90,9 @@ export default function Login() {
                   <Input>
                     <InputField
                       type="password"
-                      
+                      onChangeText={(v) => setPassword(v)}
                       placeholder="password"
+                      value={password}
                     />
                   </Input>
                 </FormControl>
