@@ -27,11 +27,15 @@ import {
   AvatarFallbackText,
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
+import { getAuth } from "firebase/auth";
+import { app } from "../../firebase/firebaseConfig";
 
 export default function ProfilePage() {
   const navigation = useNavigation();
+
+  const auth = getAuth(app);
+
   const [userFullName, setUserFullName] = useState("John Doe");
-  const [userEmail, setUserEmail] = useState("JohnDoe@gmail.com");
   const [userAddress, setUserAddress] = useState(
     "1234 Main St, City, State, 12345"
   );
@@ -42,6 +46,18 @@ export default function ProfilePage() {
     // Save user info
     setIsEditing(false);
     //@ts-ignore
+  };
+
+  const signOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        //@ts-ignore
+        navigation.navigate("Login");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
   return (
@@ -125,12 +141,12 @@ export default function ProfilePage() {
                     {isEditing ? (
                       <Input>
                         <InputField
-                          onChangeText={(value) => setUserEmail(value)}
-                          value={userEmail}
+                          readOnly={true}
+                          value={auth.currentUser.email}
                         />
                       </Input>
                     ) : (
-                      <Text>{userEmail}</Text>
+                      <Text>{auth.currentUser.email}</Text>
                     )}
                   </FormControl>
                   <FormControl
@@ -194,7 +210,7 @@ export default function ProfilePage() {
                     variant="link"
                     action="primary"
                     style={{width:'30%'}}
-                    onPress={() => navigation.navigate('Login')}> 
+                    onPress={signOut}> 
                     <ButtonText>Sign Out</ButtonText></Button>
              
                      </View>

@@ -20,9 +20,12 @@ import {
 import { config } from "@gluestack-ui/config";
 import axiosInstance from "../../utils/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAuth, signInWithCustomToken, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "../../firebase/firebaseConfig";
 
 export default function SignUp() {
   const navigation = useNavigation();
+  const auth = getAuth(app);
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,10 +50,19 @@ export default function SignUp() {
     };
 
     axiosInstance.post("http://localhost:8080/api/signup", userSignup).then((response) => {
-      if (response.headers["x-auth-token"]){
-        AsyncStorage.setItem("x-auth-token", response.headers["x-auth-token"]);
-      }
-      console.log(response);
+      const token: string = response.headers["x-auth-token"] || "";
+      AsyncStorage.setItem("x-auth-token", token);
+      signInWithEmailAndPassword(auth, email, password).then((c) => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          //@ts-ignore
+             navigation.navigate('MyParties');
+             unsubscribe();
+           });
+           //@ts-ignore
+           navigation.navigate('TabNavigator');
+      }).catch((e) => {
+        console.error(e);
+      })
     }).catch((e) => {
       console.error(e);
     })
@@ -154,9 +166,9 @@ export default function SignUp() {
               </View>
             </VStack>
             <View style={styles.bottomText}>
-              {/*@ts-ignore */}
               <TouchableOpacity
                 onPress={() => {
+                  //@ts-ignore
                   navigation.navigate("Login");
                 }}
               >
