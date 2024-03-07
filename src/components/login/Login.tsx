@@ -43,6 +43,18 @@ export default function Login() {
         setError(error.message)
       })
   }
+  // for testing!!! remove before merging start
+  const onPressBypass = () => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      //@ts-ignore
+          navigation.navigate('MyParties');
+          unsubscribe();
+        });
+        //@ts-ignore
+        navigation.navigate('TabNavigator');
+  
+  }
+  // for testing!!! remove before merging end
 
   return (
     <GluestackUIProvider config={config}>
@@ -118,6 +130,13 @@ export default function Login() {
               </Text>
               </TouchableOpacity>
             </View>
+            {/* for testing!!! remove before merging start */}
+            <View style={styles.buttonContainer}>
+              <Button size="lg" variant="solid" action="primary" style={styles.button} onPress={onPressBypass}>
+                <ButtonText>bypass</ButtonText>
+              </Button>
+            </View>
+            {/* for testing!!! remove before merging end */}
           </View>
         </VStack>
       </SafeAreaView>

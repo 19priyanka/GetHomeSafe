@@ -49,7 +49,9 @@ export default function SignUp() {
       password,
     };
 
-    axiosInstance.post("http://localhost:8080/api/signup", userSignup).then((response) => {
+    // axiosInstance.get("/test").then((d) => console.log(d.data)).catch((e) => console.error(e))
+
+    axiosInstance.post("/api/signup", userSignup).then((response) => {
       const token: string = response.headers["x-auth-token"] || "";
       AsyncStorage.setItem("x-auth-token", token);
       signInWithEmailAndPassword(auth, email, password).then((c) => {
