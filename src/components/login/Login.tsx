@@ -35,7 +35,8 @@ export default function Login() {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
-        //setUserToken(user.token); // Save the token in state
+        console.log("\n\n\n\n\nuser token: ", user.getIdToken());
+        setUserToken(user.getIdToken()); // Save the token in state
         const unsubscribe = navigation.addListener('focus', () => {
           //@ts-ignore
           navigation.navigate('MyParties');
@@ -48,7 +49,7 @@ export default function Login() {
       })
   }
 
-  console.log("User Token:", userToken);
+  //console.log("User Token:", userToken);
 
   return (
     <GluestackUIProvider config={config}>
@@ -131,7 +132,7 @@ export default function Login() {
   );
 }
 
-export const UserTokenContext = createContext<string | null>(null);
+// export const UserTokenContext = createContext<string | null>();
 
 const styles = StyleSheet.create({
   safetyIcon: {

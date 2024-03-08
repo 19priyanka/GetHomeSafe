@@ -33,8 +33,8 @@ import { app } from "../../firebase/firebaseConfig";
 
 export default function ProfilePage() {
   const navigation = useNavigation();
-  const userToken = useContext(UserTokenContext);
-  console.log('User Token in Another File:', userToken);
+  // const userToken = useContext(UserTokenContext);
+  // console.log('User Token in Another File:', userToken);
 
   const auth = getAuth(app);
 
