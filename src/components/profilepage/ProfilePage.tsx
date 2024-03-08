@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { ScrollView, View, StyleSheet, TouchableOpacity } from "react-native";
+import { UserTokenContext } from '../login/Login'
 import { useNavigation } from "@react-navigation/native";
 import {
   GluestackUIProvider,
@@ -32,6 +33,8 @@ import { app } from "../../firebase/firebaseConfig";
 
 export default function ProfilePage() {
   const navigation = useNavigation();
+  const userToken = useContext(UserTokenContext);
+  console.log('User Token in Another File:', userToken);
 
   const auth = getAuth(app);
 

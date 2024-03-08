@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
 import {
@@ -28,21 +28,27 @@ export default function Login() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [userToken, setUserToken] = useState<string>('');
 
   const onPressLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        //setUserToken(user.token); // Save the token in state
         const unsubscribe = navigation.addListener('focus', () => {
           //@ts-ignore
-             navigation.navigate('MyParties');
-             unsubscribe();
-           });
-           //@ts-ignore
-           navigation.navigate('TabNavigator');
+          navigation.navigate('MyParties');
+          unsubscribe();
+        });
+        //@ts-ignore
+        navigation.navigate('TabNavigator');
       }).catch((error) => {
         setError(error.message)
       })
   }
+
+  console.log("User Token:", userToken);
 
   return (
     <GluestackUIProvider config={config}>
@@ -124,6 +130,8 @@ export default function Login() {
     </GluestackUIProvider>
   );
 }
+
+export const UserTokenContext = createContext<string | null>(null);
 
 const styles = StyleSheet.create({
   safetyIcon: {
