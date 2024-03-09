@@ -9,7 +9,7 @@ import SignUp from './src/components/signup/SignUp';
 
 import MyParties from './src/components/parties/MyParties';
 import {Image } from "@gluestack-ui/themed";
-
+import singleParty from './src/components/parties/singleParty'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,7 +49,7 @@ const Navigation = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
-
+      <Stack.Screen name="singleParty" component={singleParty} />
 
       </Stack.Navigator>
     </NavigationContainer>
