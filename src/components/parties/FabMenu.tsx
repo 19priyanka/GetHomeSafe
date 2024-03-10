@@ -71,16 +71,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 8,
         padding: 15,
-        zIndex: 100,
+        // zIndex: 100,
       },
       menuItem: {
         padding: 15,
-        zIndex: 101,
+        // zIndex: 101,
       },
-      overlay: {
-        zIndex: 5,
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(100, 100, 100, 0.5)',
-      },
+    //   overlay: {
+    //     // zIndex: 5,
+    //     ...StyleSheet.absoluteFillObject,
+    //     backgroundColor: 'rgba(100, 100, 100, 0.5)',
+    //   },
 })
 

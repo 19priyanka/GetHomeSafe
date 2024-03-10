@@ -49,7 +49,10 @@ export default function MyParties() {
                 <View style={styles.heading}>
                   <Heading size="4xl">My Parties</Heading>
                 </View>
+                <View style={{zIndex:1}}>
                 <FabMenu/>
+                </View>
+            
                 <View style={styles.heading}>
                   <Text size="2xl" bold={true} >Active Parties</Text>
                   <ScrollView contentContainerStyle={styles.activeParties} 
