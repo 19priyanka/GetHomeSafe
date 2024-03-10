@@ -40,9 +40,6 @@ export default function MyParties() {
               <View style={styles.heading}>
                 <Heading size="4xl">Party Name</Heading>
               </View>
-              <View style={{zIndex:1}}>
-                <FabMenu/>
-                </View>
               <View style={styles.heading}>
                 <Text size="2xl" bold={true} >Join codes: 1234</Text>
                 <ScrollView contentContainerStyle={styles.memberList} 
