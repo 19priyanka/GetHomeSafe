@@ -27,9 +27,7 @@ function TabNavigator(){
         } else if (route.name === 'MyProfile') {
           iconComponent = <Image alt='MyProfile icon' source={require("./assets/user.png")} style={{  marginTop:9, width: 40, height: 40 }} />;
         }
-        else if (route.name === 'singleParty') {
-          iconComponent = <Image alt='singleParty icon' source={require("./assets/group.png")} style={{marginTop:10, width: 47, height: 47 }} />;
-        }
+       
         return iconComponent;
       },
       tabBarLabelStyle: {
@@ -40,7 +38,7 @@ function TabNavigator(){
         })}    
       >
       <Tab.Screen name="MyParties" component={MyParties} options={{title: "Parties"}} />
-      <Tab.Screen name="singleParty" component={singleParty} options={{ title: "My Party" }} /> 
+     
       <Tab.Screen name="MyProfile" component={ProfilePage} options={{title: "My Account"}}/>
     
     </Tab.Navigator>
@@ -54,7 +52,8 @@ const Navigation = () => {
        <Stack.Navigator>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false, title: "Back"}} />
+      <Stack.Screen name="singleParty" component={singleParty} options={{ headerShown: true, title: "My Party" }} /> 
      
 
       </Stack.Navigator>
