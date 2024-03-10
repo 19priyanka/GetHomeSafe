@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
 import {
@@ -28,15 +28,17 @@ export default function Login() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [userToken, setUserToken] = useState<string>('');
+
+
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const onPressLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
-        console.log("\n\n\n\n\nuser token: ", user.getIdToken());
-        setUserToken(user.getIdToken()); // Save the token in state
+      
+        // setUserToken(user.getIdToken()); // Save the token in state
         const unsubscribe = navigation.addListener('focus', () => {
           //@ts-ignore
           navigation.navigate('MyParties');
@@ -45,9 +47,23 @@ export default function Login() {
         //@ts-ignore
         navigation.navigate('TabNavigator');
       }).catch((error) => {
-        setError(error.message)
-      })
-  }
+        if (error.code === 'auth/invalid-credential') {
+          setPasswordError('Incorrect Password');
+        } else if (error.code === 'auth/invalid-email') {
+          setEmailError('Incorrect Email');
+        } else {
+          setEmailError('');
+          setPasswordError(error.message);
+        }
+        console.log(error);
+      });
+    }
+
+      useEffect(() => {
+        setEmailError('');
+        setPasswordError('');
+      }, [email, password]);
+  
 
   //console.log("User Token:", userToken);
 
@@ -85,6 +101,7 @@ export default function Login() {
                   <Input>
                     <InputField onChangeText={(v) => setEmail(v)} placeholder="Email" value={email} keyboardType="email-address" />
                   </Input>
+                  <Text style={{ color: 'red' }}>{emailError}</Text>
                 </FormControl>
                 <FormControl
                   size="md"
@@ -102,6 +119,7 @@ export default function Login() {
                       value={password}
                     />
                   </Input>
+                  <Text style={{ color: 'red' }}>{passwordError}</Text>
                 </FormControl>
               </View>
               <View style={styles.buttonContainer}>

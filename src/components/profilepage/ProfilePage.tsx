@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ScrollView, View, StyleSheet, TouchableOpacity } from "react-native";
-import { UserTokenContext } from '../login/Login'
+
 import { useNavigation } from "@react-navigation/native";
 import {
   GluestackUIProvider,
@@ -28,27 +28,46 @@ import {
   AvatarFallbackText,
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
+import axiosInstance from "../../utils/axios";
 import { getAuth } from "firebase/auth";
 import { app } from "../../firebase/firebaseConfig";
 
 export default function ProfilePage() {
   const navigation = useNavigation();
-  // const userToken = useContext(UserTokenContext);
-  // console.log('User Token in Another File:', userToken);
-
+  
   const auth = getAuth(app);
+  // console.log({"\n\n\n\nAuthentication Token is: " : auth.currentUser.stsTokenManager.accessToken});
 
-  const [userFullName, setUserFullName] = useState("John Doe");
-  const [userAddress, setUserAddress] = useState(
-    "1234 Main St, City, State, 12345"
-  );
+  const [userFullName, setUserFullName] = useState();
+  const [userAddress, setUserAddress] = useState();
+  const [newFullName, setNewFullName] = useState();
+  const [newAddress, setNewAddress] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const [isHome, setIsHome] = useState(false);
 
+
+  useEffect(() => {
+    // Load user info when component mounts
+    axiosInstance.get("http://localhost:8080/api/getUserInfo", {headers:{Authorization: auth.currentUser.accessToken}})
+      .then((response) => {
+        setUserFullName(response.data.displayName);
+        setNewFullName(response.data.displayName);
+        setUserAddress(response.data.address.street);
+        setNewAddress(response.data.address.street);
+        setIsHome(response.data.isHome);
+       
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }, []);
+
+
   const saveInfo = () => {
-    // Save user info
+    // Save user info only if the user has confirmed changes
+    setUserFullName(newFullName);
+    setUserAddress(newAddress);
     setIsEditing(false);
-    //@ts-ignore
   };
 
   const signOut = () => {
@@ -90,7 +109,7 @@ export default function ProfilePage() {
                   <Box>
                     <Heading
                       style={{
-                        maxWidth: "80%",
+                        maxWidth: "110%",
                         marginVertical: 10,
                         textAlign: "center",
                       }}
@@ -116,8 +135,7 @@ export default function ProfilePage() {
                           </Badge>
                       
                         )}
-                        
-                 
+                      
                     </Box>
                   </Box>
                 </HStack>
@@ -129,8 +147,8 @@ export default function ProfilePage() {
                     {isEditing ? (
                       <Input>
                         <InputField
-                          onChangeText={(value) => setUserFullName(value)}
-                          value={userFullName}
+                         onChangeText={(value) => setNewFullName(value)}
+                         value={newFullName}
                         />
                       </Input>
                     ) : (
@@ -175,8 +193,8 @@ export default function ProfilePage() {
                     {isEditing ? (
                       <Input>
                         <InputField
-                          onChangeText={(value) => setUserAddress(value)}
-                          value={userAddress}
+                          onChangeText={(value) => setNewAddress(value)}
+                          value={newAddress}
                         />
                       </Input>
                     ) : (
