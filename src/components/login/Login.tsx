@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
 import {
@@ -29,20 +29,43 @@ export default function Login() {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
 
+
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
   const onPressLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
+      .then((userCredential) => {
+        const user = userCredential.user;
+      
+        // setUserToken(user.getIdToken()); // Save the token in state
         const unsubscribe = navigation.addListener('focus', () => {
           //@ts-ignore
-             navigation.navigate('MyParties');
-             unsubscribe();
-           });
-           //@ts-ignore
-           navigation.navigate('TabNavigator');
+          navigation.navigate('MyParties');
+          unsubscribe();
+        });
+        //@ts-ignore
+        navigation.navigate('TabNavigator');
       }).catch((error) => {
-        setError(error.message)
-      })
-  }
+        if (error.code === 'auth/invalid-credential') {
+          setPasswordError('Incorrect Password');
+        } else if (error.code === 'auth/invalid-email') {
+          setEmailError('Incorrect Email');
+        } else {
+          setEmailError('');
+          setPasswordError(error.message);
+        }
+        console.log(error);
+      });
+    }
+
+      useEffect(() => {
+        setEmailError('');
+        setPasswordError('');
+      }, [email, password]);
+  
+
+  //console.log("User Token:", userToken);
 
   return (
     <GluestackUIProvider config={config}>
@@ -78,6 +101,7 @@ export default function Login() {
                   <Input>
                     <InputField onChangeText={(v) => setEmail(v)} placeholder="Email" value={email} keyboardType="email-address" />
                   </Input>
+                  <Text style={{ color: 'red' }}>{emailError}</Text>
                 </FormControl>
                 <FormControl
                   size="md"
@@ -95,6 +119,7 @@ export default function Login() {
                       value={password}
                     />
                   </Input>
+                  <Text style={{ color: 'red' }}>{passwordError}</Text>
                 </FormControl>
               </View>
               <View style={styles.buttonContainer}>
@@ -124,6 +149,8 @@ export default function Login() {
     </GluestackUIProvider>
   );
 }
+
+// export const UserTokenContext = createContext<string | null>();
 
 const styles = StyleSheet.create({
   safetyIcon: {

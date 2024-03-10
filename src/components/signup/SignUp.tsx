@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import {
   GluestackUIProvider,
   SafeAreaView,
+  KeyboardAvoidingView,
   VStack,
   Box,
   Image,
@@ -71,6 +72,7 @@ export default function SignUp() {
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView flex={1}>
+        <KeyboardAvoidingView>
         <VStack space="md" reversed={false}>
           <Box>
             <View style={styles.safetyIcon}>
@@ -180,6 +182,7 @@ export default function SignUp() {
             </View>
           </View>
         </VStack>
+       </KeyboardAvoidingView>
       </SafeAreaView>
     </GluestackUIProvider>
   );
