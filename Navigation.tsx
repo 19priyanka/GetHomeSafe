@@ -10,6 +10,7 @@ import SignUp from './src/components/signup/SignUp';
 import MyParties from './src/components/parties/MyParties';
 import {Image } from "@gluestack-ui/themed";
 import singleParty from './src/components/parties/singleParty'
+import { TurboModuleRegistry } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,6 +27,9 @@ function TabNavigator(){
         } else if (route.name === 'MyProfile') {
           iconComponent = <Image alt='MyProfile icon' source={require("./assets/user.png")} style={{  marginTop:9, width: 40, height: 40 }} />;
         }
+        else if (route.name === 'singleParty') {
+          iconComponent = <Image alt='singleParty icon' source={require("./assets/group.png")} style={{marginTop:10, width: 47, height: 47 }} />;
+        }
         return iconComponent;
       },
       tabBarLabelStyle: {
@@ -35,8 +39,10 @@ function TabNavigator(){
       keyboardHidesTabBar: true, 
         })}    
       >
-      <Tab.Screen name="MyParties" component={MyParties} options={{title: "My Parties"}} />
+      <Tab.Screen name="MyParties" component={MyParties} options={{title: "Parties"}} />
+      <Tab.Screen name="singleParty" component={singleParty} options={{ title: "My Party" }} /> 
       <Tab.Screen name="MyProfile" component={ProfilePage} options={{title: "My Account"}}/>
+    
     </Tab.Navigator>
   );
 };
@@ -49,7 +55,7 @@ const Navigation = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="singleParty" component={singleParty} />
+     
 
       </Stack.Navigator>
     </NavigationContainer>
