@@ -52,8 +52,8 @@ export default function ProfilePage() {
       .then((response) => {
         setUserFullName(response.data.displayName);
         setNewFullName(response.data.displayName);
-        setUserAddress(response.data.address.street);
-        setNewAddress(response.data.address.street);
+        setUserAddress(response.data.address);
+        setNewAddress(response.data.address);
         setIsHome(response.data.isHome);
        
       })
@@ -67,7 +67,17 @@ export default function ProfilePage() {
     // Save user info only if the user has confirmed changes
     setUserFullName(newFullName);
     setUserAddress(newAddress);
-    setIsEditing(false);
+
+    axiosInstance.put("http://localhost:8080/api/updateAccount", {
+        displayName: newFullName,
+        address: newAddress,
+    }, {headers:{Authorization: auth.currentUser.accessToken}}
+    ).then((response) => {
+        console.log("Updated User Info:", response.data);
+        setIsEditing(false);
+    }).catch((error) => {
+        console.log("Error:", error);
+    });
   };
 
   const signOut = () => {
