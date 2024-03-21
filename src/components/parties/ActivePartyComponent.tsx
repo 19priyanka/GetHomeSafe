@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
+// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   GluestackUIProvider,
   SafeAreaView,
@@ -19,7 +20,12 @@ import {
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 
-const ActivePartyComponent = ({partyName= "My Party"}) => {
+// type RootStackParamList = {
+//     singleParty: { partyInfo: object }
+//   }
+// type DepartmentSelectNavigationProp = NativeStackNavigationProp<RootStackParamList, 'singleParty'>;
+
+const ActivePartyComponent = ({partyName: string}) => {
     const navigation = useNavigation();
 
     return (

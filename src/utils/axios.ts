@@ -6,7 +6,7 @@ const axiosDefaultConfig: AxiosRequestConfig = {
     "Content-Type": "application/json",
   },
     timeout: 30000,
-    baseURL: "http://10.12.179.102:8080",
+    baseURL: "http://10.13.189.118:8080",
 };
 
 const axiosInstance = axios.create(axiosDefaultConfig);

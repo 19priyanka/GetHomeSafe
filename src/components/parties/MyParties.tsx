@@ -22,9 +22,12 @@ import { auth } from "../../firebase/firebaseConfig";
 import ActivePartyComponent from './ActivePartyComponent';
 import ExpiredPartyComponent from './ExpiredPartyComponent';
 import FabMenu from '../parties/FabMenu';
+import { getAuth } from "firebase/auth";
+import { app } from "../../firebase/firebaseConfig";
+
 
 export default function MyParties() {
-
+  const auth = getAuth(app);
   useEffect(() => {
     console.log(auth.currentUser)
   }, [])
@@ -32,6 +35,7 @@ export default function MyParties() {
     const navigation = useNavigation();
     const myParties = ['1','2'];
     const oldParties = ['1','2', '3','4','5','6'];
+    
   
     return (
       <GluestackUIProvider config={config}>

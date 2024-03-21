@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
+// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   VStack,
   Text,
@@ -33,10 +34,21 @@ import {
   SelectContent,
   ChevronDownIcon,
   SelectItem,
-
+  FormControlError,
+  FormControlErrorText,
+  FormControlErrorIcon,
+  AlertCircleIcon,
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
+import axiosInstance from "../../utils/axios";
+import { getAuth } from "firebase/auth";
+import { app } from "../../firebase/firebaseConfig";
 
+// type RootStackParamList = {
+//     singleParty: { partyInfo: object }
+//   }
+// type FabNavigationProp = NativeStackNavigationProp<RootStackParamList, 'singleParty'>;
+// navigation.navigate('singleParty', {response})
 const FabMenu = () => {
     const navigation = useNavigation();
     const [menuVisible, setVisible] = useState(false);
@@ -44,8 +56,13 @@ const FabMenu = () => {
     const [newModal, setNewModal] = useState(false);
     const [joinCode, setJoinCode] = useState("");
     const [partyName, setPartyName] = useState("");
-    const [expiry, setExpiry] = useState("");
+    const [expiry, setExpiry] = useState<number>("");
+    const [codeMissing, setCodeMissing] = useState(false);
+    const [nameMissing, setNameMissing] = useState(false);
+    const [userName, setUserName] = useState("");
+    const auth = getAuth(app);
     const handleMenuItemPress = (item) => {
+        retrieveUserName();
         if(item == "NEW"){
             setNewModal(true);
         }
@@ -54,6 +71,62 @@ const FabMenu = () => {
         }
         setVisible(false);
       };
+
+    const joinParty= ()=>{
+        if(joinCode!="") {
+            const joinPartyInfo = {
+                inviteCode: joinCode,
+                userDisplayName: "Nicole",
+            };
+            console.log("join party with this info: ", joinPartyInfo);
+            axiosInstance.post("/api/join-party", joinPartyInfo,{headers:{Authorization: auth.currentUser.accessToken}}).then((response) => {
+                console.log(response);
+                setJoinModal(false);
+                navigation.navigate('singleParty');
+            }).catch((e) => {
+            console.error(e);
+                setCodeMissing(true);
+            })
+        }else{
+            setCodeMissing(true);
+        }    
+    };
+    const createParty= ()=>{
+        if(partyName!="" && expiry != -1) {
+            let dt = new Date();
+            dt.setHours(dt.getHours() + 8);
+            
+            const createPartyInfo = {
+                partyName: partyName,
+                endTime: dt,
+                hostDisplayName: "Nicole",
+            };
+            console.log("create party with this info: ", createPartyInfo);
+            axiosInstance.post("/api/create-party", createPartyInfo, {headers:{Authorization: auth.currentUser.accessToken}}).then((response) => {
+                console.log(response.data);
+                setNewModal(false);
+                navigation.navigate('singleParty');
+            }).catch((e) => {
+            console.error(e);
+                setNameMissing(true);
+            })
+        }else{
+            setNameMissing(true);
+        }    
+    };
+    const retrieveUserName =()=>{
+        console.log("getting user info");
+        axiosInstance.get("/api/getUserInfo", {headers:{Authorization: auth.currentUser.accessToken}})
+            .then((response) => {
+                setUserName(response.data.displayName);
+                console.log(response.data);
+                return userName;
+            })
+            .catch((error) => {
+                console.log("Error:", error);
+                return "";
+            });
+    }
     return (
     <View>
         <Fab
@@ -104,10 +177,17 @@ const FabMenu = () => {
                   <Input>
                     <InputField
                       placeholder="Join code"
-                      onChangeText={(value) => setJoinCode(value)}
+                      onChangeText={(value) => {setJoinCode(value), setCodeMissing(false)}}
                       value={joinCode}
+                    //   isInvalid = {codeMissing}
                     />
                   </Input>
+                  <FormControlError>
+                    <FormControlErrorIcon as={AlertCircleIcon} />
+                    <FormControlErrorText>
+                        Must include a valid, numeric join code.
+                    </FormControlErrorText>
+                  </FormControlError>
                 </FormControl>
             </ModalBody>
             <ModalFooter>
@@ -127,14 +207,7 @@ const FabMenu = () => {
                     size="sm"
                     action="positive"
                     borderWidth="$0"
-                    onPress={() => {
-                        {joinCode!=""? (
-                            setJoinModal(false),
-                            console.log(joinCode),
-                            navigation.navigate('singleParty')
-                            ):(console.log("missing code"))
-                        }
-                    }}
+                    onPress={ ()=> {joinParty()} }
                 >
                     <ButtonText>Join</ButtonText>
                 </Button>
@@ -168,8 +241,9 @@ const FabMenu = () => {
                   <Input>
                     <InputField
                       placeholder="Party Name"
-                      onChangeText={(value) => setPartyName(value)}
+                      onChangeText={(value) => {setPartyName(value), setNameMissing(false)}}
                       value={partyName}
+                    //   isInvalid={nameMissing}
                     />
                   </Input>
                 </FormControl>
@@ -190,7 +264,7 @@ const FabMenu = () => {
                 <SelectPortal>
                     <SelectBackdrop />
                     <SelectContent>
-                    <SelectItem label="1 Hour" value='1' />
+                    <SelectItem label="1 Hour" value="1" />
                     <SelectItem label="3 Hours" value="3" />
                     <SelectItem label="8 Hours" value="8" />
                     <SelectItem label="12 Hours" value="12" />
@@ -208,7 +282,8 @@ const FabMenu = () => {
                     mr="$3"
                     onPress={() => {
                         setNewModal(false),
-                        setPartyName("")
+                        setPartyName(""),
+                        setExpiry(-1)
                     }}
                 >
                     <ButtonText>Cancel</ButtonText>
@@ -217,15 +292,7 @@ const FabMenu = () => {
                     size="sm"
                     action="positive"
                     borderWidth="$0"
-                    onPress={() => {
-                        {partyName!="" ? (
-                            setNewModal(false),
-                            console.log(partyName),
-                            console.log(expiry),
-                            navigation.navigate('singleParty')
-                            ):(console.log("missing info"))
-                        }
-                    }}
+                    onPress={() => { createParty() }}
                 >
                     <ButtonText>Create</ButtonText>
                 </Button>

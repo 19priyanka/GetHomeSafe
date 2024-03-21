@@ -144,11 +144,11 @@ export default function Login() {
               </TouchableOpacity>
             </View>
             {/* for testing!!! remove before merging start */}
-            <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonContainer}>
               <Button size="lg" variant="solid" action="primary" style={styles.button} onPress={onPressBypass}>
                 <ButtonText>bypass</ButtonText>
               </Button>
-            </View>
+            </View> */}
             {/* for testing!!! remove before merging end */}
           </View>
         </VStack>

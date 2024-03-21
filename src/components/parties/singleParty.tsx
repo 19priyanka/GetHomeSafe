@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import {  useNavigation } from "@react-navigation/native";
+import {  useNavigation, useRoute } from "@react-navigation/native";
 import {
   GluestackUIProvider,
   SafeAreaView,
@@ -30,6 +30,8 @@ export default function MyParties() {
                     {isHome: false, name: "Amanda Collin"},
                     {isHome: true, name: "Maggy Lou"},
                   ];
+    // const route = useRoute();
+    // const { partyInfo } = route.params as { partyInfo: object };
     
     return (
       <GluestackUIProvider config={config}>

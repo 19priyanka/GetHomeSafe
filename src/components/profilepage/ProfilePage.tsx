@@ -48,7 +48,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // Load user info when component mounts
-    axiosInstance.get("http://localhost:8080/api/getUserInfo", {headers:{Authorization: auth.currentUser.accessToken}})
+    axiosInstance.get("/api/getUserInfo", {headers:{Authorization: auth.currentUser.accessToken}})
       .then((response) => {
         setUserFullName(response.data.displayName);
         setNewFullName(response.data.displayName);
@@ -68,7 +68,7 @@ export default function ProfilePage() {
     setUserFullName(newFullName);
     setUserAddress(newAddress);
 
-    axiosInstance.put("http://localhost:8080/api/updateAccount", {
+    axiosInstance.put("/api/updateAccount", {
         displayName: newFullName,
         address: newAddress,
     }, {headers:{Authorization: auth.currentUser.accessToken}}

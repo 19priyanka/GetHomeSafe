@@ -56,6 +56,7 @@ export default function SignUp() {
       const token: string = response.headers["x-auth-token"] || "";
       AsyncStorage.setItem("x-auth-token", token);
       signInWithEmailAndPassword(auth, email, password).then((c) => {
+        console.log(c.user.displayName);
         const unsubscribe = navigation.addListener('focus', () => {
           //@ts-ignore
              navigation.navigate('MyParties');
