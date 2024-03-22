@@ -44,11 +44,10 @@ import axiosInstance from "../../utils/axios";
 import { getAuth } from "firebase/auth";
 import { app } from "../../firebase/firebaseConfig";
 
-// type RootStackParamList = {
-//     singleParty: { partyInfo: object }
-//   }
-// type FabNavigationProp = NativeStackNavigationProp<RootStackParamList, 'singleParty'>;
-// navigation.navigate('singleParty', {response})
+type RootStackParamList = {
+    singleParty: { partyInfo: object }
+  }
+
 const FabMenu = () => {
     const navigation = useNavigation();
     const [menuVisible, setVisible] = useState(false);
@@ -56,17 +55,19 @@ const FabMenu = () => {
     const [newModal, setNewModal] = useState(false);
     const [joinCode, setJoinCode] = useState("");
     const [partyName, setPartyName] = useState("");
-    const [expiry, setExpiry] = useState<number>("");
+    const [expiry, setExpiry] = useState("");
     const [codeMissing, setCodeMissing] = useState(false);
     const [nameMissing, setNameMissing] = useState(false);
     const [userName, setUserName] = useState("");
     const auth = getAuth(app);
     const handleMenuItemPress = (item) => {
-        retrieveUserName();
+        // retrieveUserName();
         if(item == "NEW"){
+            setPartyName("");
             setNewModal(true);
         }
         else if(item == "JOIN"){
+            setJoinCode("");
             setJoinModal(true);
         }
         setVisible(false);
@@ -79,10 +80,12 @@ const FabMenu = () => {
                 userDisplayName: "Nicole",
             };
             console.log("join party with this info: ", joinPartyInfo);
-            axiosInstance.post("/api/join-party", joinPartyInfo,{headers:{Authorization: auth.currentUser.accessToken}}).then((response) => {
+            axiosInstance.post("/api/join-party", joinPartyInfo,{headers:{Authorization: auth.currentUser.accessToken}})
+            .then((response) => {
                 console.log(response);
+                const partyInfo = response.data;
                 setJoinModal(false);
-                navigation.navigate('singleParty');
+                navigation.navigate('SingleParty', {partyInfo});
             }).catch((e) => {
             console.error(e);
                 setCodeMissing(true);
@@ -92,9 +95,9 @@ const FabMenu = () => {
         }    
     };
     const createParty= ()=>{
-        if(partyName!="" && expiry != -1) {
+        if(partyName!="" && expiry != "") {
             let dt = new Date();
-            dt.setHours(dt.getHours() + 8);
+            dt.setHours(dt.getHours() + Number(expiry));
             
             const createPartyInfo = {
                 partyName: partyName,
@@ -104,8 +107,9 @@ const FabMenu = () => {
             console.log("create party with this info: ", createPartyInfo);
             axiosInstance.post("/api/create-party", createPartyInfo, {headers:{Authorization: auth.currentUser.accessToken}}).then((response) => {
                 console.log(response.data);
+                const partyInfo = response.data;
                 setNewModal(false);
-                navigation.navigate('singleParty');
+                navigation.navigate('SingleParty', {partyInfo});
             }).catch((e) => {
             console.error(e);
                 setNameMissing(true);
@@ -254,23 +258,24 @@ const FabMenu = () => {
                 <FormControlLabel mb="$1">
                     <FormControlLabelText>Party Expiry</FormControlLabelText>
                 </FormControlLabel>
-                <Select>
-                <SelectTrigger>
-                    <SelectInput placeholder="Party Expiry" onSelectionChange={(value) => setExpiry(value)}/>
-                    <SelectIcon mr="$3">
-                    <Icon as={ChevronDownIcon} />
-                    </SelectIcon>
-                </SelectTrigger>
-                <SelectPortal>
-                    <SelectBackdrop />
-                    <SelectContent>
-                    <SelectItem label="1 Hour" value="1" />
-                    <SelectItem label="3 Hours" value="3" />
-                    <SelectItem label="8 Hours" value="8" />
-                    <SelectItem label="12 Hours" value="12" />
-                    <SelectItem label="24 Hours" value="24" />
-                    </SelectContent>
-                </SelectPortal>
+                <Select selectedValue={expiry}
+                        onValueChange={(itemValue) => setExpiry(itemValue)}>
+                    <SelectTrigger>
+                        <SelectInput placeholder="Party Expiry"  />
+                        <SelectIcon mr="$3">
+                        <Icon as={ChevronDownIcon} />
+                        </SelectIcon>
+                    </SelectTrigger>
+                    <SelectPortal>
+                        <SelectBackdrop />
+                        <SelectContent>
+                            <SelectItem label="1 Hour" value="1" />
+                            <SelectItem label="3 Hours" value="3" />
+                            <SelectItem label="8 Hours" value="8" />
+                            <SelectItem label="12 Hours" value="12" />
+                            <SelectItem label="24 Hours" value="24" />
+                        </SelectContent>
+                    </SelectPortal>
                 </Select>
             </FormControl>
             </ModalBody>
@@ -283,7 +288,7 @@ const FabMenu = () => {
                     onPress={() => {
                         setNewModal(false),
                         setPartyName(""),
-                        setExpiry(-1)
+                        setExpiry("")
                     }}
                 >
                     <ButtonText>Cancel</ButtonText>

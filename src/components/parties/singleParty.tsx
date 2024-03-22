@@ -18,20 +18,20 @@ import {
   BadgeText,
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
-import FabMenu from './FabMenu';
 import MemberComponent from './memberComponent';
 
+interface singlePartyProps{ navigation: any;}
 
-export default function MyParties() {
+export default function SingleParty(singlePartyProps) {
 
     const navigation = useNavigation();
-    const members = [{isHome: true, name: "John Doe"},
-                    {isHome: false, name: "Cory Smith"},
-                    {isHome: false, name: "Amanda Collin"},
-                    {isHome: true, name: "Maggy Lou"},
-                  ];
-    // const route = useRoute();
-    // const { partyInfo } = route.params as { partyInfo: object };
+    
+    const route = useRoute();
+    const { partyInfo } = route.params as { partyInfo: object };
+    console.log("single party props: ", partyInfo);
+    console.log(partyInfo.name);
+    console.log(partyInfo.inviteCode);
+  
     
     return (
       <GluestackUIProvider config={config}>
@@ -40,14 +40,14 @@ export default function MyParties() {
           <VStack space="md" reversed={false}>
             <Box>
               <View style={styles.heading}>
-                <Heading size="4xl">Party Name</Heading>
+                <Heading size="4xl">{partyInfo.name}</Heading>
               </View>
               <View style={styles.heading}>
-                <Text size="2xl" bold={true} >Join codes: 1234</Text>
+                <Text size="2xl" bold={true} >Join code: {partyInfo.inviteCode}</Text>
                 <ScrollView contentContainerStyle={styles.memberList} 
                             scrollEnabled={true}
                             >
-                {members.map((item, index) => (
+                {partyInfo.members.map((item, index) => (
                   <View key={index}>
                     <MemberComponent  memberData={item} ></MemberComponent>
                   </View>

@@ -20,16 +20,16 @@ import {
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 
-// type RootStackParamList = {
-//     singleParty: { partyInfo: object }
-//   }
-// type DepartmentSelectNavigationProp = NativeStackNavigationProp<RootStackParamList, 'singleParty'>;
+type RootStackParamList = {
+    singleParty: { partyInfo: object }
+  }
 
-const ActivePartyComponent = ({partyName: string}) => {
+
+const ActivePartyComponent = ({partyInfo}) => {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity onPress={()=> {navigation.navigate('singleParty')}}>
+        <TouchableOpacity onPress={()=> {console.log({partyInfo}), navigation.navigate('SingleParty', {partyInfo})}}>
             <Box
                 bg="#DDDDDD"
                 py="$4"

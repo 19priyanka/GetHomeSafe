@@ -24,17 +24,36 @@ import ExpiredPartyComponent from './ExpiredPartyComponent';
 import FabMenu from '../parties/FabMenu';
 import { getAuth } from "firebase/auth";
 import { app } from "../../firebase/firebaseConfig";
-
+import axiosInstance from "../../utils/axios";
 
 export default function MyParties() {
   const auth = getAuth(app);
+  const navigation = useNavigation();
+  const [myParties, setMyParties]= useState([]);
+  const [oldParties, setOldParties ]= useState([]);
   useEffect(() => {
-    console.log(auth.currentUser)
+    axiosInstance.get("/api/parties",{headers:{Authorization: auth.currentUser.accessToken}})
+      .then((response) => {
+          console.log(response.data);
+          let active = [];
+          let expired = [];
+          response.data.map((party)=>{
+            if(party.active){
+              active.push(party);
+            }
+            else{
+              expired.push(party);
+            }
+          });
+          setOldParties(expired);
+          setMyParties(active);
+      }).catch((e) => {
+      console.error(e);
+          console.log("error getting parties: ",e);
+      })
   }, [])
 
-    const navigation = useNavigation();
-    const myParties = ['1','2'];
-    const oldParties = ['1','2', '3','4','5','6'];
+    
     
   
     return (
@@ -64,9 +83,9 @@ export default function MyParties() {
                               alwaysBounceHorizontal ={true}
                               alwaysBounceVertical ={false}
                               >
-                    {myParties.map((item, index) => (
+                    {myParties.map((party, index) => (
                       <View key={index}>
-                        <ActivePartyComponent  partyName={"My Party"} ></ActivePartyComponent>
+                        <ActivePartyComponent  partyInfo={party} ></ActivePartyComponent>
                       </View>
                     ))}
                   </ScrollView>
@@ -74,9 +93,9 @@ export default function MyParties() {
                 <View style={styles.heading}>
                   <Text size="2xl" bold={true} >Past Parties</Text>
                   <View style={styles.expiredParties} >
-                    {oldParties.map((item, index) => (
+                    {oldParties.map((party, index) => (
                       <View key={index}>
-                        <ExpiredPartyComponent  partyName={"My Party"} ></ExpiredPartyComponent>
+                        <ExpiredPartyComponent  partyName={party.name} ></ExpiredPartyComponent>
                       </View>
                     ))}
                   </View>
