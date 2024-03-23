@@ -22,16 +22,39 @@ import { auth } from "../../firebase/firebaseConfig";
 import ActivePartyComponent from './ActivePartyComponent';
 import ExpiredPartyComponent from './ExpiredPartyComponent';
 import FabMenu from '../parties/FabMenu';
+import { getAuth } from "firebase/auth";
+import { app } from "../../firebase/firebaseConfig";
+import axiosInstance from "../../utils/axios";
 
 export default function MyParties() {
-
+  const auth = getAuth(app);
+  const navigation = useNavigation();
+  const [myParties, setMyParties]= useState([]);
+  const [oldParties, setOldParties ]= useState([]);
   useEffect(() => {
-    console.log(auth.currentUser)
+    axiosInstance.get("/api/parties",{headers:{Authorization: auth.currentUser.accessToken}})
+      .then((response) => {
+          console.log(response.data);
+          let active = [];
+          let expired = [];
+          response.data.map((party)=>{
+            if(party.active){
+              active.push(party);
+            }
+            else{
+              expired.push(party);
+            }
+          });
+          setOldParties(expired);
+          setMyParties(active);
+      }).catch((e) => {
+      console.error(e);
+          console.log("error getting parties: ",e);
+      })
   }, [])
 
-    const navigation = useNavigation();
-    const myParties = ['1','2'];
-    const oldParties = ['1','2', '3','4','5','6'];
+    
+    
   
     return (
       <GluestackUIProvider config={config}>
@@ -39,13 +62,6 @@ export default function MyParties() {
           <ScrollView>
             <VStack space="md" reversed={false}>
               <Box>
-                {/* <View style={styles.safetyIcon}>
-                  <Image
-                    alt="shiedl"
-                    source={require("../../../assets/location.png")}
-                    style={{width: 50, height: 50}}
-                  />
-                </View> */}
                 <View style={styles.heading}>
                   <Heading size="4xl">My Parties</Heading>
                 </View>
@@ -55,14 +71,10 @@ export default function MyParties() {
             
                 <View style={styles.heading}>
                   <Text size="2xl" bold={true} >Active Parties</Text>
-                  <ScrollView contentContainerStyle={styles.activeParties} 
-                              scrollEnabled={true}
-                              alwaysBounceHorizontal ={true}
-                              alwaysBounceVertical ={false}
-                              >
-                    {myParties.map((item, index) => (
+                  <ScrollView horizontal contentContainerStyle={styles.activeParties} >
+                    {myParties.map((party, index) => (
                       <View key={index}>
-                        <ActivePartyComponent  partyName={"My Party"} ></ActivePartyComponent>
+                        <ActivePartyComponent  partyInfo={party} ></ActivePartyComponent>
                       </View>
                     ))}
                   </ScrollView>
@@ -70,9 +82,9 @@ export default function MyParties() {
                 <View style={styles.heading}>
                   <Text size="2xl" bold={true} >Past Parties</Text>
                   <View style={styles.expiredParties} >
-                    {oldParties.map((item, index) => (
+                    {oldParties.map((party, index) => (
                       <View key={index}>
-                        <ExpiredPartyComponent  partyName={"My Party"} ></ExpiredPartyComponent>
+                        <ExpiredPartyComponent  partyName={party.name} ></ExpiredPartyComponent>
                       </View>
                     ))}
                   </View>
@@ -100,12 +112,9 @@ export default function MyParties() {
       justifyContent: "flex-start",
     },
     activeParties: {
-      display: "flex",
-      flexDirection: "row",
+      flexDirection: 'row',
       margin: 20,
-      justifyContent: "space-between",
-      alignItems: 'flex-start',
-      width: '200%'
+      height: 180,
     },
     expiredParties: {
       display: "flex",

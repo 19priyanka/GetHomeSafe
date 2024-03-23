@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import {  useNavigation } from "@react-navigation/native";
+import {  useNavigation, useRoute } from "@react-navigation/native";
 import {
   GluestackUIProvider,
   SafeAreaView,
@@ -18,18 +18,34 @@ import {
   BadgeText,
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
-import FabMenu from './FabMenu';
 import MemberComponent from './memberComponent';
+import axiosInstance from "../../utils/axios";
+import { getAuth } from "firebase/auth";
+import { app } from "../../firebase/firebaseConfig";
 
+interface singlePartyProps{ navigation: any;}
 
-export default function MyParties() {
+export default function SingleParty(singlePartyProps) {
 
     const navigation = useNavigation();
-    const members = [{isHome: true, name: "John Doe"},
-                    {isHome: false, name: "Cory Smith"},
-                    {isHome: false, name: "Amanda Collin"},
-                    {isHome: true, name: "Maggy Lou"},
-                  ];
+    const auth = getAuth(app);
+    const route = useRoute();
+    const { partyInfo } = route.params as { partyInfo: object };
+    const [party, setParty] = useState(partyInfo);
+    const [url, setURL] = useState(`/api/partyStatus?partyId={${party._id}}`);
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+          axiosInstance.get(url,{headers:{Authorization: auth.currentUser.accessToken}})
+            .then((response) => {
+                console.log(response.data);
+                setPartyInfo(response.data);
+            }).catch((e) => {
+            console.error(e);
+                console.log("error getting parties: ",e);
+            })
+          }, 30000);
+          return () => clearInterval(intervalId);
+    }, [])
     
     return (
       <GluestackUIProvider config={config}>
@@ -38,14 +54,14 @@ export default function MyParties() {
           <VStack space="md" reversed={false}>
             <Box>
               <View style={styles.heading}>
-                <Heading size="4xl">Party Name</Heading>
+                <Heading size="4xl">{party.name}</Heading>
               </View>
               <View style={styles.heading}>
-                <Text size="2xl" bold={true} >Join codes: 1234</Text>
+                <Text size="2xl" bold={true} >Join code: {party.inviteCode}</Text>
                 <ScrollView contentContainerStyle={styles.memberList} 
                             scrollEnabled={true}
                             >
-                {members.map((item, index) => (
+                {party.members.map((item, index) => (
                   <View key={index}>
                     <MemberComponent  memberData={item} ></MemberComponent>
                   </View>

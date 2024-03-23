@@ -9,7 +9,7 @@ import SignUp from './src/components/signup/SignUp';
 
 import MyParties from './src/components/parties/MyParties';
 import {Image } from "@gluestack-ui/themed";
-import singleParty from './src/components/parties/singleParty'
+import SingleParty from './src/components/parties/SingleParty'
 import { TurboModuleRegistry } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -53,7 +53,7 @@ const Navigation = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false, title: "Back"}} />
-      <Stack.Screen name="singleParty" component={singleParty} options={{ headerShown: true, title: "My Party" }} /> 
+      <Stack.Screen name="SingleParty" component={SingleParty} options={{ headerShown: true, title: "My Party" }} /> 
      
 
       </Stack.Navigator>
