@@ -62,13 +62,6 @@ export default function MyParties() {
           <ScrollView>
             <VStack space="md" reversed={false}>
               <Box>
-                {/* <View style={styles.safetyIcon}>
-                  <Image
-                    alt="shiedl"
-                    source={require("../../../assets/location.png")}
-                    style={{width: 50, height: 50}}
-                  />
-                </View> */}
                 <View style={styles.heading}>
                   <Heading size="4xl">My Parties</Heading>
                 </View>
@@ -78,11 +71,7 @@ export default function MyParties() {
             
                 <View style={styles.heading}>
                   <Text size="2xl" bold={true} >Active Parties</Text>
-                  <ScrollView contentContainerStyle={styles.activeParties} 
-                              scrollEnabled={true}
-                              alwaysBounceHorizontal ={true}
-                              alwaysBounceVertical ={false}
-                              >
+                  <ScrollView horizontal contentContainerStyle={styles.activeParties} >
                     {myParties.map((party, index) => (
                       <View key={index}>
                         <ActivePartyComponent  partyInfo={party} ></ActivePartyComponent>
@@ -123,12 +112,9 @@ export default function MyParties() {
       justifyContent: "flex-start",
     },
     activeParties: {
-      display: "flex",
-      flexDirection: "row",
+      flexDirection: 'row',
       margin: 20,
-      justifyContent: "space-between",
-      alignItems: 'flex-start',
-      width: '200%'
+      height: 180,
     },
     expiredParties: {
       display: "flex",

@@ -79,7 +79,7 @@ const FabMenu = () => {
                 inviteCode: joinCode,
                 userDisplayName: "Nicole",
             };
-            console.log("join party with this info: ", joinPartyInfo);
+            // console.log("join party with this info: ", joinPartyInfo);
             axiosInstance.post("/api/join-party", joinPartyInfo,{headers:{Authorization: auth.currentUser.accessToken}})
             .then((response) => {
                 console.log(response);

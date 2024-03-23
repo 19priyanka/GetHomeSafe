@@ -27,9 +27,41 @@ type RootStackParamList = {
 
 const ActivePartyComponent = ({partyInfo}) => {
     const navigation = useNavigation();
-
+    const [minutesLeft, setMinutesLeft] = useState<Number>(0);
+    const [hoursLeft, setHoursLeft] = useState<Number>(0);
+    const [home, setHome] = useState<Number>(0);
+    const [notHome, setNotHome] = useState<Number>(0);
+    useEffect(()=>{
+        const now = new Date();
+        const expiry = new Date(partyInfo.endTime);
+        const differenceInMilliseconds = Math.abs(expiry.getTime() - now.getTime());
+    
+        setHoursLeft( Math.floor(differenceInMilliseconds / (1000 * 60 * 60)));
+        setMinutesLeft(Math.floor((differenceInMilliseconds % (1000 * 60 * 60)) / (1000 * 60)));
+    
+        let homeCount = 0;
+        let notHomeCount = 0;
+        partyInfo.members.map((member)=>{
+            if(member.isHome){
+              homeCount++;
+            }
+            else{
+              notHomeCount++;
+            }
+          });
+        setHome(homeCount);
+        setNotHome(notHomeCount);
+        const intervalId = setInterval(() => {
+        setMinutesLeft(prevMinutesLeft => prevMinutesLeft - 1);
+        if(minutesLeft == -1){
+            setMinutesLeft(59);
+            setHoursLeft(prevHoursLeft => prevHoursLeft - 1);
+        }
+        }, 60000);
+        return () => clearInterval(intervalId);
+    })
     return (
-        <TouchableOpacity onPress={()=> {console.log({partyInfo}), navigation.navigate('SingleParty', {partyInfo})}}>
+        <TouchableOpacity onPress={()=> { navigation.navigate('SingleParty', {partyInfo})}}>
             <Box
                 bg="#DDDDDD"
                 py="$4"
@@ -51,16 +83,16 @@ const ActivePartyComponent = ({partyInfo}) => {
                     />
                 </View>
                 <View>
-                    <Text bold={true} >My Party</Text>
-                    <Text fontSize="$xs">expires in: 3 hours</Text>
+                    <Text bold={true} >{partyInfo.name}</Text>
+                    <Text fontSize="$xs">expires in: {hoursLeft} hr {minutesLeft} min</Text>
                 </View>
                 </HStack>
                 <HStack justifyContent="space-evenly" margin="$2" >
                 <Badge size="lg" variant="outline" borderRadius="$md" action="success">
-                    <BadgeText>Is Home 2</BadgeText>
+                    <BadgeText>Is Home {home}</BadgeText>
                 </Badge>
                 <Badge size="lg" variant="outline" borderRadius="$md" action="error">
-                    <BadgeText>Not Home 2</BadgeText>
+                    <BadgeText>Not Home {notHome}</BadgeText>
                 </Badge>
             </HStack>
         </Box>

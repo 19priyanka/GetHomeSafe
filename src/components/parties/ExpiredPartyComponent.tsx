@@ -8,7 +8,7 @@ import {
 } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 
-const ExpiredPartyComponent = ({partyName= "My Party"}) => {
+const ExpiredPartyComponent = ({partyName}) => {
     return (
         <Box
             bg="#DDDDDD"
@@ -32,7 +32,7 @@ const ExpiredPartyComponent = ({partyName= "My Party"}) => {
                 />
             </View>
             <View style ={styles.textContent}>
-                <Text bold={true}>My Party</Text>
+                <Text bold={true}>{partyName}</Text>
                 <Text fontSize="$xs" >expired</Text>
             </View>
     </Box>
