@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,11 +11,56 @@ import MyParties from './src/components/parties/MyParties';
 import {Image } from "@gluestack-ui/themed";
 import SingleParty from './src/components/parties/SingleParty'
 import { TurboModuleRegistry } from 'react-native';
+import * as Location from 'expo-location';
+import axiosInstance from "./src/utils/axios";
+import { getAuth } from "firebase/auth";
+import { app } from "./src/firebase/firebaseConfig";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function TabNavigator(){
+  
+
+  // useEffect(() => {
+  //   const auth = getAuth(app);
+    
+  //   const fetchLocationAndSendUpdate = async () => {
+  //     console.log("every 30 seconds...");
+  //   //   // Request permission to access location
+  //   //   const { status } = await Location.requestForegroundPermissionsAsync();
+  //   //   if (status !== 'granted') {
+  //   //     console.log('Permission to access location was denied');
+  //   //     return;
+  //   //   }
+
+  //   //   try {
+  //   //     // Get the device's current location
+  //   //     const { coords } = await Location.getCurrentPositionAsync({});
+
+  //   //     // Send location data to the server using Axios
+  //   //     axiosInstance.post('/api/locationUpdate', {
+  //   //       currentLat: coords.latitude,
+  //   //       currentLong: coords.longitude,
+  //   //     }, {
+  //   //       headers: { Authorization: auth.currentUser.accessToken }
+  //   //     }).then((response) => {
+  //   //       console.log("Location update sent successfully ", response.data);
+  //   //     }).catch((error) => {
+  //   //       console.error('Error sending location update:', error);
+  //   //     });
+  //   //   } catch (error) {
+  //   //     console.error('Error getting current location:', error);
+  //   //   }
+  //   };
+
+  //   // Call the function immediately and then every 30 seconds
+  //   fetchLocationAndSendUpdate();
+  //   const intervalId = setInterval(fetchLocationAndSendUpdate, 30000);
+
+  //   // Clear the interval when the component unmounts
+  //   return () => clearInterval(intervalId);
+  // }, []);
   return (
     <Tab.Navigator 
     screenOptions={({ route }) => ({
