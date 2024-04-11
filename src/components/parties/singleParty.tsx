@@ -38,7 +38,7 @@ export default function SingleParty(singlePartyProps) {
           axiosInstance.get(url,{headers:{Authorization: auth.currentUser.accessToken}})
             .then((response) => {
                 console.log(response.data);
-                setPartyInfo(response.data);
+                setParty(response.data);
             }).catch((e) => {
             console.error(e);
                 console.log("error getting parties: ",e);
