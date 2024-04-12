@@ -9,7 +9,7 @@ import SignUp from './src/components/signup/SignUp';
 
 import MyParties from './src/components/parties/MyParties';
 import {Image } from "@gluestack-ui/themed";
-import SingleParty from './src/components/parties/SingleParty'
+import SingleParty from './src/components/parties/singleParty'
 import { TurboModuleRegistry } from 'react-native';
 import * as Location from 'expo-location';
 import axiosInstance from "./src/utils/axios";
