@@ -27,39 +27,42 @@ function TabNavigator(){
     const fetchLocationAndSendUpdate = async () => {
       // console.log("every 30 seconds...");
       // Request permission to access location
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
-        return;
-      }
+      console.log("user email      :   ", auth.currentUser?.email);
+      // if(auth.currentUser?.email != undefined){
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.log('Permission to access location was denied');
+          return;
+        }
 
-      try {
-        // Get the device's current location
-        const { coords } = await Location.getCurrentPositionAsync({});
+        try {
+          // Get the device's current location
+          const { coords } = await Location.getCurrentPositionAsync({});
 
-        // Send location data to the server using Axios
-        axiosInstance.post('/api/locationUpdate', {
-          currentLat: coords.latitude,
-          currentLong: coords.longitude,
-        }, {
-          headers: { Authorization: auth.currentUser.accessToken }
-        }).then((response) => {
-          console.log("Location update sent successfully ", response.data);
-          console.log(`Lat and long:  ${coords.latitude} , ${coords.longitude}`);
-        }).catch((error) => {
-          console.error('Error sending location update:', error);
-        });
-      } catch (error) {
-        console.error('Error getting current location:', error);
-      }
-    };
+          // Send location data to the server using Axios
+          axiosInstance.post('/api/locationUpdate', {
+            currentLat: coords.latitude,
+            currentLong: coords.longitude,
+          }, {
+            headers: { Authorization: auth.currentUser.accessToken }
+          }).then((response) => {
+            console.log("Location update sent successfully ", response.data);
+            console.log(`Lat and long:  ${coords.latitude} , ${coords.longitude}`);
+          }).catch((error) => {
+            console.error('Error sending location update:', error);
+          });
+        } catch (error) {
+          console.error('Error getting current location:', error);
+        }
+      };
 
-    // Call the function immediately and then every 30 seconds
-    fetchLocationAndSendUpdate();
-    const intervalId = setInterval(fetchLocationAndSendUpdate, 30000);
+      // Call the function immediately and then every 30 seconds
+      fetchLocationAndSendUpdate();
+      const intervalId = setInterval(fetchLocationAndSendUpdate, 30000);
 
-    // Clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
+      // Clear the interval when the component unmounts
+      return () => clearInterval(intervalId);
+    // }
   }, []);
   return (
     <Tab.Navigator 
