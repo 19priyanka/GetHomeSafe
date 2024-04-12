@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import {  useNavigation, useRoute } from "@react-navigation/native";
 import {
   GluestackUIProvider,
@@ -34,26 +34,25 @@ export default function SingleParty(singlePartyProps) {
     const { partyInfo } = route.params as { partyInfo: object };
     const [party, setParty] = useState(partyInfo);
     const [url, setURL] = useState(`/api/partyStatus?partyId=${party._id}`);
-    useFocusEffect(
-      React.useCallback(() => {
-        const intervalId = setInterval(() => {
-          axiosInstance.get(url,{headers:{Authorization: auth.currentUser.accessToken}})
-            .then((response) => {
-                console.log("singleParty: ", response.data);
-                setParty(response.data);
-            }).catch((e) => {
-            console.error(e);
-                console.log("error getting party: ",e);
-            })
-        }, 30000);
-        return () => clearInterval(intervalId);
-      }, [])
-    );
+    const [refreshing, setRefreshing] = useState(false);
+    useEffect(() => {
+      if(refreshing) {
+        setRefreshing(false);
+      }
+      axiosInstance.get(url,{headers:{Authorization: auth.currentUser.accessToken}})
+        .then((response) => {
+            console.log("singleParty: ", response.data);
+            setParty(response.data);
+        }).catch((e) => {
+        console.error(e);
+            console.log("error getting party: ",e);
+        })
+  }, [refreshing])
     
     return (
       <GluestackUIProvider config={config}>
         <SafeAreaView flex={1}>
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl onRefresh={() => setRefreshing(true)} refreshing={refreshing} />}>
           <VStack space="md" reversed={false}>
             <Box>
               <View style={styles.heading}>
