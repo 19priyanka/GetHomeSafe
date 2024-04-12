@@ -32,7 +32,7 @@ export default function SingleParty(singlePartyProps) {
     const route = useRoute();
     const { partyInfo } = route.params as { partyInfo: object };
     const [party, setParty] = useState(partyInfo);
-    const [url, setURL] = useState(`/api/partyStatus?partyId={${party._id}}`);
+    const [url, setURL] = useState(`/api/partyStatus?partyId=${party._id}`);
     useEffect(() => {
         const intervalId = setInterval(() => {
           axiosInstance.get(url,{headers:{Authorization: auth.currentUser.accessToken}})
