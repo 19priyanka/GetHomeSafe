@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import Login from "./src/components/login/Login";
 import Navigation from "./Navigation";
 
+
 export default function App() {
   //so we can see the splash screen for a bit
   SplashScreen.preventAutoHideAsync();
