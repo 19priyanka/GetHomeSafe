@@ -57,6 +57,28 @@ export default function MyParties() {
       })
   }, [refreshing])
 
+  useEffect(() => {
+    axiosInstance.get("/api/parties",{headers:{Authorization: auth.currentUser.accessToken}})
+      .then((response) => {
+          console.log(response.data);
+          let active = [];
+          let expired = [];
+          response.data.map((party)=>{
+            if(party.active){
+              active.push(party);
+            }
+            else{
+              expired.push(party);
+            }
+          });
+          setOldParties(expired);
+          setMyParties(active);
+      }).catch((e) => {
+      console.error(e);
+          console.log("error getting parties: ",e);
+      })
+  }, [])
+
     
     
   

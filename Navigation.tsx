@@ -27,6 +27,7 @@ function TabNavigator(){
     const fetchLocationAndSendUpdate = async () => {
       // console.log("every 30 seconds...");
       // Request permission to access location
+      console.log("email   :   ", auth.currentUser?.email);
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.log('Permission to access location was denied');
@@ -42,7 +43,7 @@ function TabNavigator(){
           currentLat: coords.latitude,
           currentLong: coords.longitude,
         }, {
-          headers: { Authorization: auth.currentUser.accessToken }
+          headers: { Authorization: auth.currentUser?.accessToken }
         }).then((response) => {
           console.log("Location update sent successfully ", response.data);
           console.log(`Lat and long:  ${coords.latitude} , ${coords.longitude}`);
