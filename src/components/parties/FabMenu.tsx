@@ -64,6 +64,7 @@ const FabMenu = () => {
         // retrieveUserName();
         if(item == "NEW"){
             setPartyName("");
+            setExpiry("");
             setNewModal(true);
         }
         else if(item == "JOIN"){
@@ -71,16 +72,17 @@ const FabMenu = () => {
             setJoinModal(true);
         }
         setVisible(false);
+        retrieveUserName();
       };
 
     const joinParty= ()=>{
         if(joinCode!="") {
             const joinPartyInfo = {
                 inviteCode: joinCode,
-                userDisplayName: "Nicole",
+                userDisplayName: userName? userName: "partyMember",
             };
             // console.log("join party with this info: ", joinPartyInfo);
-            axiosInstance.post("/api/join-party", joinPartyInfo,{headers:{Authorization: auth.currentUser.accessToken}})
+            axiosInstance.post("/api/join-party", joinPartyInfo,{headers:{Authorization: auth.currentUser?.accessToken}})
             .then((response) => {
                 console.log(response);
                 const partyInfo = response.data;
@@ -98,11 +100,11 @@ const FabMenu = () => {
         if(partyName!="" && expiry != "") {
             let dt = new Date();
             dt.setHours(dt.getHours() + Number(expiry));
-            
+            console.log(auth.currentUser);
             const createPartyInfo = {
                 partyName: partyName,
                 endTime: dt,
-                hostDisplayName: "Nicole",
+                hostDisplayName: userName? userName: "Host",
             };
             console.log("create party with this info: ", createPartyInfo);
             axiosInstance.post("/api/create-party", createPartyInfo, {headers:{Authorization: auth.currentUser.accessToken}}).then((response) => {
@@ -123,12 +125,10 @@ const FabMenu = () => {
         axiosInstance.get("/api/getUserInfo", {headers:{Authorization: auth.currentUser.accessToken}})
             .then((response) => {
                 setUserName(response.data.displayName);
-                console.log(response.data);
-                return userName;
+                console.log(userName);
             })
             .catch((error) => {
-                console.log("Error:", error);
-                return "";
+                console.log("Error getting userNAme:", error);
             });
     }
     return (

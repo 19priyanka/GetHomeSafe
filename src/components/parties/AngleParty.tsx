@@ -22,6 +22,7 @@ import MemberComponent from './memberComponent';
 import axiosInstance from "../../utils/axios";
 import { getAuth } from "firebase/auth";
 import { app } from "../../firebase/firebaseConfig";
+import { useFocusEffect } from '@react-navigation/native';
 
 interface singlePartyProps{ navigation: any;}
 
@@ -33,19 +34,21 @@ export default function SingleParty(singlePartyProps) {
     const { partyInfo } = route.params as { partyInfo: object };
     const [party, setParty] = useState(partyInfo);
     const [url, setURL] = useState(`/api/partyStatus?partyId=${party._id}`);
-    useEffect(() => {
+    useFocusEffect(
+      React.useCallback(() => {
         const intervalId = setInterval(() => {
           axiosInstance.get(url,{headers:{Authorization: auth.currentUser.accessToken}})
             .then((response) => {
-                console.log(response.data);
+                console.log("singleParty: ", response.data);
                 setParty(response.data);
             }).catch((e) => {
             console.error(e);
-                console.log("error getting parties: ",e);
+                console.log("error getting party: ",e);
             })
-          }, 30000);
-          return () => clearInterval(intervalId);
-    }, [])
+        }, 30000);
+        return () => clearInterval(intervalId);
+      }, [])
+    );
     
     return (
       <GluestackUIProvider config={config}>

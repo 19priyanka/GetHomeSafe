@@ -7,7 +7,8 @@ const axiosDefaultConfig: AxiosRequestConfig = {
   },
     timeout: 30000,
     // baseURL: "http://192.168.1.30:8080",
-    baseURL: "http://localhost:8080",
+    baseURL: "https://gw0.gethomesafe.live",
+    // baseURL: "https://gw0.gethomesafe.live",
 };
 
 const axiosInstance = axios.create(axiosDefaultConfig);

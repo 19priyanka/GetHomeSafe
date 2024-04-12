@@ -9,7 +9,7 @@ import SignUp from './src/components/signup/SignUp';
 
 import MyParties from './src/components/parties/MyParties';
 import {Image } from "@gluestack-ui/themed";
-import SingleParty from './src/components/parties/singleParty'
+import SingleParty from './src/components/parties/AngleParty'
 import { TurboModuleRegistry } from 'react-native';
 import * as Location from 'expo-location';
 import axiosInstance from "./src/utils/axios";
@@ -45,6 +45,7 @@ function TabNavigator(){
           headers: { Authorization: auth.currentUser.accessToken }
         }).then((response) => {
           console.log("Location update sent successfully ", response.data);
+          console.log(`Lat and long:  ${coords.latitude} , ${coords.longitude}`);
         }).catch((error) => {
           console.error('Error sending location update:', error);
         });
