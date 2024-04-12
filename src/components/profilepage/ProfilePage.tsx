@@ -43,8 +43,7 @@ export default function ProfilePage() {
   const [newFullName, setNewFullName] = useState();
   const [newAddress, setNewAddress] = useState();
   const [isEditing, setIsEditing] = useState(false);
-  const [isHome, setIsHome] = useState(false);
-
+  const [changeCount, setChangeCount] = useState<Number>(0);
 
   useEffect(() => {
     // Load user info when component mounts
@@ -53,14 +52,13 @@ export default function ProfilePage() {
         setUserFullName(response.data.displayName);
         setNewFullName(response.data.displayName);
         setUserAddress(response.data.address);
-        setNewAddress(response.data.address);
-        setIsHome(response.data.isHome);
+        setNewAddress(response.data.address?.street || "");
        
       })
       .catch((error) => {
         console.log("Error:", error);
       });
-  }, []);
+  }, [changeCount]);
 
 
   const saveInfo = () => {
@@ -70,11 +68,12 @@ export default function ProfilePage() {
 
     axiosInstance.put("/api/updateAccount", {
         displayName: newFullName,
-        address: newAddress,
+        address: {...userAddress, "street": newAddress},
     }, {headers:{Authorization: auth.currentUser.accessToken}}
     ).then((response) => {
         console.log("Updated User Info:", response.data);
         setIsEditing(false);
+        setChangeCount(changeCount+1);
     }).catch((error) => {
         console.log("Error:", error);
     });
@@ -113,7 +112,6 @@ export default function ProfilePage() {
                   <Box style={{ marginLeft: 10 }}>
                     <Avatar bgColor="$amber600" size="xl" borderRadius="$full">
                       <AvatarFallbackText>{userFullName}</AvatarFallbackText>
-                     {isHome? ( <AvatarBadge></AvatarBadge>) : (<AvatarBadge bgColor="$red500"></AvatarBadge>)}
                     </Avatar>
                   </Box>
                   <Box>
@@ -129,22 +127,6 @@ export default function ProfilePage() {
                     </Heading>
                     <Box>
                     
-                        {isHome ? (
-                     
-                            <Badge size="lg" variant="solid" action="success" ml="$1">
-                          <BadgeText>Home</BadgeText>
-                          <BadgeIcon as={CheckCircleIcon} ml="$1" />
-                          </Badge>
-                   
-                        )
-                          :(
-                         
-                              <Badge size="lg" variant="solid" action="error" ml="$1">
-                          <BadgeText>Not Home</BadgeText>
-                          <BadgeIcon as={CloseCircleIcon} ml="$1" />
-                          </Badge>
-                      
-                        )}
                       
                     </Box>
                   </Box>
@@ -208,7 +190,7 @@ export default function ProfilePage() {
                         />
                       </Input>
                     ) : (
-                      <Text>{userAddress}</Text>
+                      <Text>{userAddress?.street || ""}</Text>
                     )}
                   </FormControl>
                 </View>

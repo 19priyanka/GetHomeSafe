@@ -51,14 +51,14 @@ const ActivePartyComponent = ({partyInfo}) => {
           });
         setHome(homeCount);
         setNotHome(notHomeCount);
-        const intervalId = setInterval(() => {
-        setMinutesLeft(prevMinutesLeft => prevMinutesLeft - 1);
-        if(minutesLeft == -1){
-            setMinutesLeft(59);
-            setHoursLeft(prevHoursLeft => prevHoursLeft - 1);
-        }
-        }, 60000);
-        return () => clearInterval(intervalId);
+        // const intervalId = setInterval(() => {
+        // setMinutesLeft(prevMinutesLeft => prevMinutesLeft - 1);
+        // if(minutesLeft == -1){
+        //     setMinutesLeft(59);
+        //     setHoursLeft(prevHoursLeft => prevHoursLeft - 1);
+        // }
+        // }, 60000);
+        // return () => clearInterval(intervalId);
     })
     return (
         <TouchableOpacity onPress={()=> { navigation.navigate('SingleParty', {partyInfo})}}>
