@@ -1,4 +1,14 @@
 **Get Home Safe**
+_How To Run on Emulator_
+
+Step 1:
+Clone this repository and ensure that you have the backend repository cloned as well (https://github.com/rjb75/gethomesafe-backend)
+
+Step 2: 
+Follow the instructions to deploy the backend or connect to an already running backend 
+
+Step 3: 
+Navigate to 
 
 
 
