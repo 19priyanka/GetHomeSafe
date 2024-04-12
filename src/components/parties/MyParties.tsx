@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import {  useNavigation } from "@react-navigation/native";
 import {
   GluestackUIProvider,
@@ -31,7 +31,11 @@ export default function MyParties() {
   const navigation = useNavigation();
   const [myParties, setMyParties]= useState([]);
   const [oldParties, setOldParties ]= useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
+    if(refreshing) {
+      setRefreshing(false);
+    }
     axiosInstance.get("/api/parties",{headers:{Authorization: auth.currentUser.accessToken}})
       .then((response) => {
           console.log(response.data);
@@ -51,7 +55,7 @@ export default function MyParties() {
       console.error(e);
           console.log("error getting parties: ",e);
       })
-  }, [])
+  }, [refreshing])
 
     
     
@@ -59,7 +63,7 @@ export default function MyParties() {
     return (
       <GluestackUIProvider config={config}>
         <SafeAreaView flex={1}>
-          <ScrollView>
+          <ScrollView refreshControl={<RefreshControl onRefresh={() => setRefreshing(true)} refreshing={refreshing} />} >
             <VStack space="md" reversed={false}>
               <Box>
                 <View style={styles.heading}>
