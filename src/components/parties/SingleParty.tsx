@@ -47,7 +47,7 @@ export default function SingleParty(singlePartyProps) {
         console.error(e);
             console.log("error getting party: ",e);
         })
-  }, [refreshing])
+    }, [refreshing])
     
     return (
       <GluestackUIProvider config={config}>
