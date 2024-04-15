@@ -8,7 +8,7 @@ Step 2:
 Follow the instructions to deploy the backend or connect to an already running backend 
 
 Step 3: 
-Navigate to 
+Connect to the server and run npm run.
 
 
 
