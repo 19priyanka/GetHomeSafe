@@ -10,6 +10,13 @@ Follow the instructions to deploy the backend or connect to an already running b
 Step 3: 
 Connect to the server and run npm run.
 
+_Motivation_
+
+
+Our primary goal with this app is to establish a reliable means of monitoring the safety of friends and ensuring they have arrived home safely from any outing, such as getting home from the bar, leaving university late when campus is mostly deserted and many others. Walking alone or transportation options like Uber, other rideshares, and public transit can sometimes feel unsafe, particularly late at night. While it’s reassuring to have a friend know where you are and when you’re safely home in these scenarios, there’s no effective solution currently on the market.
+
+
+
 _Objective and Scope_
 
 
